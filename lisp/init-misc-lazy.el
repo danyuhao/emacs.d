@@ -47,31 +47,18 @@
        (lambda ()
          (concat (getenv "USER") " $ ")))
 
-;; Write backup files to own directory
-(if (not (file-exists-p (expand-file-name "~/.backups")))
-  (make-directory (expand-file-name "~/.backups")))
-(setq backup-by-coping t ; don't clobber symlinks
-      backup-directory-alist '(("." . "~/.backups"))
-      delete-old-versions t
-      version-control t  ;use versioned backups
-      kept-new-versions 6
-      kept-old-versions 2)
-
-;; Donot make backups of files, not safe
-;; @see https://github.com/joedicastro/dotfiles/tree/master/emacs
-(setq vc-make-backup-files nil)
 
 ;; I'm in Australia now, so I set the locale to "en_AU"
 (defun insert-date (prefix)
-    "Insert the current date. With prefix-argument, use ISO format. With
+  "Insert the current date. With prefix-argument, use ISO format. With
    two prefix arguments, write out the day and month name."
-    (interactive "P")
-    (let ((format (cond
-                   ((not prefix) "%d.%m.%Y")
-                   ((equal prefix '(4)) "%Y-%m-%d")
-                   ((equal prefix '(16)) "%d %B %Y")))
-          )
-      (insert (format-time-string format))))
+  (interactive "P")
+  (let ((format (cond
+                 ((not prefix) "%d.%m.%Y")
+                 ((equal prefix '(4)) "%Y-%m-%d")
+                 ((equal prefix '(16)) "%d %B %Y")))
+        )
+    (insert (format-time-string format))))
 
 ;;compute the length of the marked region
 (defun region-length ()
@@ -256,17 +243,7 @@ grab matched string, cssize them, and insert into kill ring"
   "Make sure the full path of file exist in clipboard. This command will convert
 The full path into relative path insert it as a local file link in org-mode"
   (interactive)
-  (let (str)
-    (with-temp-buffer
-      (paste-from-x-clipboard)
-      (setq str (buffer-string)))
-
-    ;; convert to relative path (relative to current buffer) if possible
-    (let ((m (string-match (file-name-directory (buffer-file-name)) str) ))
-        (if (and m (= 0 m ))
-            (setq str (substring str (length (file-name-directory (buffer-file-name))))))
-      (insert (format "[[file:%s]]" str))
-      )))
+  (insert (format "[[file:%s]]" (file-relative-name (simpleclip-get-contents)))))
 
 (defun font-file-to-base64 (file)
   (let ((str "")

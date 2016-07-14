@@ -23,6 +23,19 @@
 ;; here is the workaround
 (setq evil-default-cursor t)
 
+;; {{ multiple-cursors
+;; step 1, select thing in visual-mode
+;; step 2, `mc/mark-all-like-this' or `mc/mark-all-like-this-in-defun'
+;; step 3, `ace-mc-add-multiple-cursors' to remove cursor, press RET to confirm
+;; step 4, press s or S to start replace
+;; step 5, press C-g to quit multiple-cursors
+(define-key evil-visual-state-map (kbd "mn") 'mc/mark-next-like-this)
+(define-key evil-visual-state-map (kbd "ma") 'mc/mark-all-like-this)
+(define-key evil-visual-state-map (kbd "md") 'mc/mark-all-like-this-in-defun)
+(define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
+(define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor)
+;; }}
+
 ;; enable evil-mode
 (evil-mode 1)
 
@@ -30,12 +43,16 @@
 (require 'evil-surround)
 (global-evil-surround-mode 1)
 (defun evil-surround-prog-mode-hook-setup ()
+  (push '(47 . ("/" . "/")) evil-surround-pairs-alist)
   (push '(40 . ("(" . ")")) evil-surround-pairs-alist)
   (push '(41 . ("(" . ")")) evil-surround-pairs-alist))
 (add-hook 'prog-mode-hook 'evil-surround-prog-mode-hook-setup)
 (defun evil-surround-emacs-lisp-mode-hook-setup ()
   (push '(?` . ("`" . "'")) evil-surround-pairs-alist))
 (add-hook 'emacs-lisp-mode-hook 'evil-surround-emacs-lisp-mode-hook-setup)
+(defun evil-surround-org-mode-hook-setup ()
+  (push '(?= . ("=" . "=")) evil-surround-pairs-alist))
+(add-hook 'org-mode-hook 'evil-surround-org-mode-hook-setup)
 ;; }}
 
 ;; {{ For example, press `viW*`
@@ -44,16 +61,17 @@
 (global-evil-visualstar-mode t)
 ;; }}
 
-;; {{ https://github.com/gabesoft/evil-mc
-;; `grm' create cursor for all matching selected
-;; `gru' undo all cursors
-;; `grs' pause cursor
-;; `grr' resume cursor
-;; `grh' make cursor here
-;; `C-p', `C-n' previous cursor, next cursor
-(require 'evil-mc)
-(global-evil-mc-mode 1)
-;; }}
+
+;; ffip-diff-mode evil setup
+(defun ffip-diff-mode-hook-setup ()
+    (evil-local-set-key 'normal "p" 'diff-hunk-prev)
+    (evil-local-set-key 'normal "n" 'diff-hunk-next)
+    (evil-local-set-key 'normal "P" 'diff-file-prev)
+    (evil-local-set-key 'normal "N" 'diff-file-next)
+    (evil-local-set-key 'normal "q" 'ffip-diff-quit)
+    (evil-local-set-key 'normal (kbd "RET") 'ffip-diff-find-file)
+    (evil-local-set-key 'normal "o" 'ffip-diff-find-file))
+(add-hook 'ffip-diff-mode-hook 'ffip-diff-mode-hook-setup)
 
 (require 'evil-mark-replace)
 
@@ -72,8 +90,12 @@
 
 ;; between dollar signs:
 (define-and-bind-text-object "$" "\\$" "\\$")
+;; between equal signs
+(define-and-bind-text-object "=" "=" "=")
 ;; between pipe characters:
 (define-and-bind-text-object "|" "|" "|")
+;; regular expression
+(define-and-bind-text-object "/" "/" "/")
 ;; trimmed line
 (define-and-bind-text-object "l" "^ *" " *$")
 ;; angular template
@@ -384,7 +406,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "epl" 'emmet-expand-line
        "rd" 'evilmr-replace-in-defun
        "rb" 'evilmr-replace-in-buffer
-       "tt" 'evilmr-tag-selected-region ;; recommended
+       "ts" 'evilmr-tag-selected-region ;; recommended
        "rt" 'evilmr-replace-in-tagged-region ;; recommended
        "tua" 'artbollocks-mode
        "cby" 'cb-switch-between-controller-and-view
@@ -397,10 +419,13 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "gf" 'counsel-git-find-file
        "gc" 'counsel-git-find-file-committed-with-line-at-point
        "gl" 'counsel-git-grep-yank-line
-       "gg" 'counsel-git-grep ; quickest grep should be easy to press
+       "gg" 'counsel-git-grep-in-project ; quickest grep should be easy to press
        "ga" 'counsel-git-grep-by-author
        "gm" 'counsel-git-find-my-file
-       "gs" 'counsel-git-show-commit
+       "gs" 'ffip-show-diff ; find-file-in-project 5.0+
+       "sf" 'counsel-git-show-file
+       "sh" 'my-select-from-search-text-history
+       "df" 'counsel-git-diff-file
        "rjs" 'run-js
        "jsr" 'js-send-region
        "rmz" 'run-mozilla
@@ -419,7 +444,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "." 'evil-ex
        ;; @see https://github.com/pidu/git-timemachine
        ;; p: previous; n: next; w:hash; W:complete hash; g:nth version; q:quit
-       "tmt" 'git-timemachine-toggle
+       "tt" 'my-git-timemachine
        "tdb" 'tidy-buffer
        "tdl" 'tidy-current-line
        ;; toggle overview,  @see http://emacs.wordpress.com/2007/01/16/quick-and-dirty-code-folding/
@@ -439,8 +464,8 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "rr" 'counsel-recentf-goto
        "rh" 'counsel-yank-bash-history ; bash history command => yank-ring
        "rf" 'counsel-goto-recent-directory
-       "dfa" 'diff-region-tag-selected-as-a
-       "dfb" 'diff-region-compare-with-b
+       "da" 'diff-region-tag-selected-as-a
+       "db" 'diff-region-compare-with-b
        "di" 'evilmi-delete-items
        "si" 'evilmi-select-items
        "jb" 'js-beautify
@@ -464,7 +489,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "ulr" 'uniquify-all-lines-region
        "ulb" 'uniquify-all-lines-buffer
        "lj" 'moz-load-js-file-and-send-it
-       "lk" 'latest-kill-to-clipboard
        "mr" 'moz-console-clear
        "rnr" 'rinari-web-server-restart
        "rnc" 'rinari-find-controller
@@ -475,6 +499,8 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "rnl" 'rinari-find-log
        "rno" 'rinari-console
        "rnt" 'rinari-find-test
+       "fs" 'ffip-save-ivy-last
+       "fr" 'ffip-ivy-resume
        "ss" 'swiper-the-thing ; http://oremacs.com/2015/03/25/swiper-0.2.0/ for guide
        "hst" 'hs-toggle-fold
        "hsa" 'hs-toggle-fold-all
@@ -544,6 +570,8 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "v=" 'git-gutter:popup-hunk
        "hh" 'cliphist-paste-item
        "yu" 'cliphist-select-item
+       "ih" 'my-goto-git-gutter ; use ivy-mode
+       "ir" 'ivy-resume
        "nn" 'my-goto-next-hunk
        "pp" 'my-goto-previous-hunk
        "ww" 'narrow-or-widen-dwim
@@ -562,6 +590,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "kk" 'scroll-other-window
        "jj" 'scroll-other-window-up
        "yy" 'hydra-launcher/body
+       "tt" 'my-toggle-indentation
        "gs" 'git-gutter:set-start-revision
        "gh" 'git-gutter-reset-to-head-parent
        "gr" 'git-gutter-reset-to-default
@@ -638,6 +667,31 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "mp" '(lambda () (interactive) (mpc-next-prev-song t)))
 ;; }}
 
+;; {{ remember what we searched
+;; http://emacs.stackexchange.com/questions/24099/how-to-yank-text-to-search-command-after-in-evil-mode/
+(defvar my-search-text-history nil "List of text I searched.")
+(defun my-select-from-search-text-history ()
+  (interactive)
+  (ivy-read "Search text history:" my-search-text-history
+            :action (lambda (item)
+                      (copy-yank-str item)
+                      (message "%s => clipboard & yank ring" item))))
+(defun my-cc-isearch-string ()
+  (interactive)
+  (if (and isearch-string (> (length isearch-string) 0))
+      ;; NOT pollute clipboard who has things to paste into Emacs
+      (add-to-list 'my-search-text-history isearch-string)))
+
+(defadvice evil-search-incrementally (after evil-search-incrementally-after-hack activate)
+  (my-cc-isearch-string))
+
+(defadvice evil-search-word (after evil-search-word-after-hack activate)
+  (my-cc-isearch-string))
+
+(defadvice evil-visualstar/begin-search (after evil-visualstar/begin-search-after-hack activate)
+  (my-cc-isearch-string))
+;; }}
+
 ;; change mode-line color by evil state
 (lexical-let ((default-color (cons (face-background 'mode-line)
                                    (face-foreground 'mode-line))))
@@ -654,4 +708,11 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (require 'evil-nerd-commenter)
 (evilnc-default-hotkeys)
 
+;; {{ evil-exchange
+;; press gx twice to exchange, gX to cancel
+(require 'evil-exchange)
+;; change default key bindings (if you want) HERE
+;; (setq evil-exchange-key (kbd "zx"))
+(evil-exchange-install)
+;; }}
 (provide 'init-evil)

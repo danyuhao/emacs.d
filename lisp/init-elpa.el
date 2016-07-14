@@ -8,7 +8,8 @@ But you may use safer HTTPS instead.")
 ;; List of VISIBLE packages from melpa-unstable (http://melpa.org)
 ;; Feel free to add more packages!
 (defvar melpa-include-packages
-  '(bbdb
+  '(ace-mc
+    bbdb
     color-theme
     wgrep
     robe
@@ -50,59 +51,8 @@ But you may use safer HTTPS instead.")
     textile-mode
     w3m
     erlang
-    company-c-headers
-    ;; make all the color theme packages available
-    afternoon-theme
-    define-word
-    ahungry-theme
-    alect-themes
-    ample-theme
-    ample-zen-theme
-    anti-zenburn-theme
-    atom-dark-theme
-    badger-theme
-    base16-theme
-    basic-theme
-    birds-of-paradise-plus-theme
     workgroups2
-    bliss-theme
-    boron-theme
-    bubbleberry-theme
-    busybee-theme
-    calmer-forest-theme
-    cherry-blossom-theme
-    clues-theme
-    colonoscopy-theme
-    color-theme-approximate
-    color-theme-buffer-local
-    color-theme-sanityinc-solarized
-    color-theme-sanityinc-tomorrow
-    color-theme-solarized
-    colorsarenice-theme
-    cyberpunk-theme
-    dakrone-theme
-    darcula-theme
-    dark-krystal-theme
-    darkburn-theme
-    darkmine-theme
-    display-theme
-    distinguished-theme
-    django-theme
-    espresso-theme
-    firebelly-theme
-    firecode-theme
-    flatland-black-theme
-    pythonic
-    flatland-theme
-    flatui-theme
-    gandalf-theme
-    gotham-theme
-    grandshell-theme
-    gruber-darker-theme
-    gruvbox-theme
-    hc-zenburn-theme
-    hemisu-theme
-    heroku-theme)
+    company-c-headers)
   "Don't install any Melpa packages except these packages")
 
 ;; We include the org repository for completeness, but don't use it.
@@ -179,11 +129,10 @@ ARCHIVE is the string name of the package archive.")
 ;; Don't take Melpa versions of certain packages
 (setq package-filter-function
       (lambda (package version archive)
-        (and
-         (not (memq package '(eieio)))
-         (or (and (string-equal archive "melpa") (memq package melpa-include-packages))
-             (not (string-equal archive "melpa")))
-         )))
+        (or (not (string-equal archive "melpa"))
+            (memq package melpa-include-packages)
+            ;; use all color themes
+            (string-match (format "%s" package) "-theme"))))
 
 ;; un-comment below code if you prefer use all the package on melpa (unstable) without limitation
 ;; (setq package-filter-function nil)
@@ -194,6 +143,7 @@ ARCHIVE is the string name of the package archive.")
 
 (package-initialize)
 
+(require-package 'async)
 (require-package 'dash) ; required by string-edit
 ; color-theme 6.6.1 in elpa is buggy
 (require-package 'color-theme)
@@ -239,7 +189,9 @@ ARCHIVE is the string name of the package archive.")
 (require-package 'flymake-css)
 (require-package 'flymake-jslint)
 (require-package 'flymake-ruby)
+(require-package 'ivy)
 (require-package 'swiper)
+(require-package 'counsel) ; counsel => swiper => ivy
 (require-package 'find-file-in-project)
 (require-package 'elpy)
 (require-package 'hl-sexp)

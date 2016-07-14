@@ -1,8 +1,4 @@
 ;; {{ swiper&ivy-mode
-(autoload 'ivy-recentf "ivy" "" t)
-(autoload 'ivy-read "ivy")
-(autoload 'swiper "swiper" "" t)
-
 (defun swiper-the-thing ()
   (interactive)
   (swiper (if (region-active-p)
@@ -82,11 +78,36 @@
 
 
 ;; {{ find-file-in-project (ffip)
+(defun my-git-show-selected-commit ()
+  "Run 'git show selected-commit' in shell"
+  (let* ((git-cmd "git --no-pager log --date=short --pretty=format:'%h|%ad|%s|%an'")
+         (git-cmd-rlts (split-string (shell-command-to-string git-cmd) "\n" t))
+         (line (ivy-read "git log:" git-cmd-rlts)))
+    (shell-command-to-string (format "git show %s"
+                                     (car (split-string line "|" t))))))
+
+(defun my-git-log-patch-current-file ()
+  "Run 'git log -p --author=whoever' in shell"
+  (let* ((git-cmd-shortlog "git --no-pager log --format='%aN' | sort -u")
+         (git-cmd-shortlog-rlts (split-string (shell-command-to-string git-cmd-shortlog) "\n" t))
+         (original-author-name (ivy-read "git authors:" git-cmd-shortlog-rlts))
+         (git-cmd-log-dash-p (concat "git --no-pager log --no-color --date=short --pretty=format:'%h%d %ad %s (%an)'"
+                                      (format " --author='%s'" original-author-name)
+                                      (format " -p %s" (buffer-file-name)))))
+    (shell-command-to-string git-cmd-log-dash-p)))
+
 (autoload 'find-file-in-project "find-file-in-project" "" t)
 (autoload 'find-file-in-project-by-selected "find-file-in-project" "" t)
 (autoload 'ffip-get-project-root-directory "find-file-in-project" "" t)
 (setq ffip-match-path-instead-of-filename t)
-
+;; I only use git
+(setq ffip-diff-backends '(my-git-show-selected-commit
+                           my-git-log-patch-current-file
+                           "cd $(git rev-parse --show-toplevel) && git diff"
+                           "cd $(git rev-parse --show-toplevel) && git diff --cached"
+                           (shell-command-to-string (format "cd $(git rev-parse --show-toplevel) && git --no-pager log --date=short -S'%s' -p"
+                                                            (read-string "Git search string:")))
+                           (car kill-ring)))
 (defun neotree-project-dir ()
   "Open NeoTree using the git root."
   (interactive)
@@ -97,33 +118,6 @@
           (neotree-dir project-dir)
           (neotree-find file-name))
       (message "Could not find git project root."))))
-
-(defvar my-grep-extra-opts
-  "--exclude-dir=.git --exclude-dir=.bzr --exclude-dir=.svn"
-  "Extra grep options passed to `my-grep'")
-
-(defun my-grep ()
-  "Grep file at project root directory or current directory"
-  (interactive)
-  (let ((keyword (if (region-active-p)
-                     (buffer-substring-no-properties (region-beginning) (region-end))
-                   (read-string "Enter grep pattern: ")))
-        cmd collection val 1st root)
-
-    (let ((default-directory (setq root (or (and (fboundp 'ffip-get-project-root-directory)
-                                                 (ffip-get-project-root-directory))
-                                            default-directory))))
-      (setq cmd (format "%s -rsn %s \"%s\" *"
-                        grep-program my-grep-extra-opts keyword))
-      (when (and (setq collection (split-string
-                                   (shell-command-to-string cmd)
-                                   "\n"
-                                   t))
-                 (setq val (ivy-read (format "matching \"%s\" at %s:" keyword root) collection))))
-      (setq lst (split-string val ":"))
-      (find-file (car lst))
-      (goto-char (point-min))
-      (forward-line (1- (string-to-number (cadr lst)))))))
 ;; }}
 
 ;; {{ groovy-mode
@@ -176,7 +170,7 @@
   (interactive)
   (dictionary-new-search (cons (if (region-active-p)
                                    (buffer-substring-no-properties (region-beginning) (region-end))
-                                 (thing-at-point 'symbol)) dictionary-default-dictionary)))
+                                 (read-string "Input word for dict.org:")) dictionary-default-dictionary)))
 
 ;; }}
 
@@ -221,6 +215,14 @@
 
 (defun generic-prog-mode-hook-setup ()
   (unless (is-buffer-file-temp)
+
+    ;; turn of `linum-mode' when there are more than 5000 lines
+    ;; use `wc -c file' for performance reason
+    (if (and (executable-find "wc")
+             (> (string-to-number (shell-command-to-string (format "wc -c %s" (buffer-file-name))))
+                (* 5000 80))
+             (linum-mode -1)))
+
     ;; fic-mode has performance issue on 5000 line C++, we can always use swiper instead
     ;; don't spell check double words
     (setq flyspell-check-doublon nil)
@@ -286,6 +288,7 @@
 (defun my-download-subtitles ()
   (interactive)
   (shell-command "periscope.py -l en *.mkv *.mp4 *.avi &"))
+
 
 ;; {{ @see http://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 (defun sudo-edit (&optional arg)
@@ -428,6 +431,15 @@ See \"Reusing passwords for several connections\" from INFO.
                         "/GTAGS$"
                         "/GRAGS$"
                         "/GPATH$"
+                        ;; binary
+                        "\\.mkv$"
+                        "\\.mp[34]$"
+                        "\\.avi$"
+                        "\\.pdf$"
+                        ;; sub-titles
+                        "\\.sub$"
+                        "\\.srt$"
+                        "\\.ass$"
                         ;; ~/.emacs.d/**/*.el included
                         ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
                         ))
@@ -437,7 +449,13 @@ See \"Reusing passwords for several connections\" from INFO.
 (autoload 'which-function "which-func")
 (autoload 'popup-tip "popup")
 
+(defun my-which-file ()
+  "Return current file name for Yasnippets."
+  (if (buffer-file-name) (format "%s:" (file-name-nondirectory (buffer-file-name)))
+    ""))
+
 (defun my-which-function ()
+  "Return current function name."
   ;; clean the imenu cache
   ;; @see http://stackoverflow.com/questions/13426564/how-to-force-a-rescan-in-imenu-by-a-function
   (setq imenu--index-alist nil)
@@ -525,15 +543,6 @@ See \"Reusing passwords for several connections\" from INFO.
           (setq rlt t)))
     rlt))
 
-;; {{ tramp setup
-(add-to-list 'backup-directory-alist
-             (cons tramp-file-name-regexp nil))
-(setq tramp-chunksize 8192)
-
-;; @see https://github.com/syl20bnr/spacemacs/issues/1921
-;; If you tramp is hanging, you can uncomment below line.
-;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-;; }}
 
 ;; {{
 (defun goto-edge-by-comparing-font-face (&optional step)
@@ -558,15 +567,12 @@ If step is -1, go backward."
 ;; }}
 
 (defun my-minibuffer-setup-hook ()
-  ;; Use paredit in the minibuffer
-  (conditionally-paredit-mode 1)
   (local-set-key (kbd "M-y") 'paste-from-x-clipboard)
   (local-set-key (kbd "C-k") 'kill-line)
   (setq gc-cons-threshold most-positive-fixnum))
 
 (defun my-minibuffer-exit-hook ()
   ;; evil-mode also use minibuf
-  (conditionally-paredit-mode -1)
   (setq gc-cons-threshold best-gc-cons-threshold))
 
 ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
@@ -685,6 +691,12 @@ If step is -1, go backward."
 ;; fastdef.el
 (autoload 'fastdef-insert "fastdef" nil t)
 (autoload 'fastdef-insert-from-history "fastdef" nil t)
+
+;; indention management
+(defun my-toggle-indentation ()
+  (interactive)
+  (setq indent-tabs-mode (not indent-tabs-mode))
+  (message "indent-tabs-mode=%s" indent-tabs-mode))
 
 ;; {{ auto-save.el
 (require 'auto-save)
