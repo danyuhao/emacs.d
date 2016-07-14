@@ -118,10 +118,10 @@
         gnus-summary-exit
         goto-line
         pwd
-        ido-complete
-        ido-delete-backward-updir
-        ido-exit-minibuffer
-        ido-switch-buffer
+        ;; ido-complete
+        ;; ido-delete-backward-updir
+        ;; ido-exit-minibuffer
+        ;; ido-switch-buffer
         indent-new-comment-line
         isearch-abort
         isearch-other-meta-char
@@ -134,13 +134,13 @@
         isearch-printing-char
         isearch-repeat-forward
         isearch-ring-retreat
-        ispell-minor-check
+        ;; ispell-minor-check
         ivy-backward-delete-char
         ivy-done
         ivy-next-line
         ivy-previous-line
-        js-mode
-        js2-line-break
+        ;; js-mode
+        ;; js2-line-break
         keyboard-escape-quit
         keyboard-quit
         keyfreq-mode
@@ -158,14 +158,14 @@
         next-history-element
         next-line
         hippie-expand
-        org-beginning-of-line
-        org-ctrl-c-ctrl-c
-        org-cycle
-        org-end-of-line
-        org-force-self-insert
-        org-return
-        org-self-insert-command
-        org-todo
+        ;; org-beginning-of-line
+        ;; org-ctrl-c-ctrl-c
+        ;; org-cycle
+        ;; org-end-of-line
+        ;; org-force-self-insert
+        ;; org-return
+        ;; org-self-insert-command
+        ;; org-todo
         package-menu-execute
         paredit-doublequote
         paredit-backward-delete
@@ -182,16 +182,16 @@
         right-char
         save-buffer
         save-buffers-kill-terminal
-        web-mode
-        web-mode-jshint
-        web-mode-test
-        web-mode-reload
-        web-mode-reveal
-        web-mode-complete
-        web-mode-navigate
-        web-mode-surround
-        web-mode-tag-beginning
-        web-mode-part-beginning
+        ;; web-mode
+        ;; web-mode-jshint
+        ;; web-mode-test
+        ;; web-mode-reload
+        ;; web-mode-reveal
+        ;; web-mode-complete
+        ;; web-mode-navigate
+        ;; web-mode-surround
+        ;; web-mode-tag-beginning
+        ;; web-mode-part-beginning
         scroll-down-command
         scroll-up-command
         select-window-0
@@ -213,12 +213,12 @@
         undefined ;; lambda function
         undo-tree-redo
         undo-tree-undo
-        w3m-goto-url
-        w3m-next-anchor
-        w3m-view-this-url
-        yas-compile-directory
-        yas-expand
-        yas-next-field-or-maybe-expand
+        ;; w3m-goto-url
+        ;; w3m-next-anchor
+        ;; w3m-view-this-url
+        ;; yas-compile-directory
+        ;; yas-expand
+        ;; yas-next-field-or-maybe-expand
         yank
         ))
 

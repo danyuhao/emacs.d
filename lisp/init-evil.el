@@ -1,5 +1,6 @@
 ;; @see https://bitbucket.org/lyro/evil/issue/360/possible-evil-search-symbol-forward
 ;; evil 1.0.8 search word instead of symbol
+(require 'evil)
 (setq evil-symbol-word-search t)
 ;; load undo-tree and ert
 (add-to-list 'load-path "~/.emacs.d/site-lisp/evil/lib")
@@ -16,7 +17,6 @@
 (adjust-major-mode-keymap-with-evil "browse-kill-ring")
 (adjust-major-mode-keymap-with-evil "etags-select")
 
-(require 'evil)
 
 ;; @see https://bitbucket.org/lyro/evil/issue/342/evil-default-cursor-setting-should-default
 ;; cursor is alway black because of evil
@@ -262,35 +262,35 @@ If the character before and after CH is space or tab, CH is NOT slash"
         (grep-mode . emacs)
         (Info-mode . emacs)
         (term-mode . emacs)
-        (sdcv-mode . emacs)
-        (anaconda-nav-mode . emacs)
+        ;; (sdcv-mode . emacs)
+        ;; (anaconda-nav-mode . emacs)
         (log-edit-mode . emacs)
         (vc-log-edit-mode . emacs)
         (magit-log-edit-mode . emacs)
-        (inf-ruby-mode . emacs)
+        ;; (inf-ruby-mode . emacs)
         (direx:direx-mode . emacs)
-        (yari-mode . emacs)
-        (erc-mode . emacs)
+        ;; (yari-mode . emacs)
+        ;; (erc-mode . emacs)
         (neotree-mode . emacs)
-        (w3m-mode . emacs)
-        (gud-mode . emacs)
+        ;; (w3m-mode . emacs)
+        ;; (gud-mode . emacs)
         (help-mode . emacs)
         (eshell-mode . emacs)
         (shell-mode . emacs)
         ;;(message-mode . emacs)
         (fundamental-mode . emacs)
-        (weibo-timeline-mode . emacs)
-        (weibo-post-mode . emacs)
-        (sr-mode . emacs)
+        ;; (weibo-timeline-mode . emacs)
+        ;; (weibo-post-mode . emacs)
+        ;; (sr-mode . emacs)
         (dired-mode . emacs)
         (compilation-mode . emacs)
         (speedbar-mode . emacs)
         (messages-buffer-mode . normal)
-        (magit-commit-mode . normal)
-        (magit-diff-mode . normal)
+        ;; (magit-commit-mode . normal)
+        ;; (magit-diff-mode . normal)
         (browse-kill-ring-mode . normal)
         (etags-select-mode . normal)
-        (js2-error-buffer-mode . emacs)
+        ;; (js2-error-buffer-mode . emacs)
         )
       do (evil-set-initial-state mode state))
 
@@ -348,7 +348,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "mf" 'mark-defun
        "em" 'erase-message-buffer
        "eb" 'eval-buffer
-       "sd" 'sudo-edit
+       ;; "sd" 'sudo-edit
        "sc" 'shell-command
        "ee" 'eval-expression
        "aa" 'copy-to-x-clipboard ; used frequently
@@ -371,7 +371,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "ip" 'find-file-in-project
        "kk" 'find-file-in-project-by-selected
        "fd" 'find-directory-in-project-by-selected
-       "trm" 'get-term
+       ;; "trm" 'get-term
        "tff" 'toggle-frame-fullscreen
        "tfm" 'toggle-frame-maximized
        "ti" 'fastdef-insert
@@ -380,15 +380,15 @@ If the character before and after CH is space or tab, CH is NOT slash"
        ;; "cl" 'evilnc-comment-or-uncomment-to-the-line
        ;; "cc" 'evilnc-copy-and-comment-lines
        ;; "cp" 'evilnc-comment-or-uncomment-paragraphs
-       "epy" 'emmet-expand-yas
-       "epl" 'emmet-expand-line
+       ;; "epy" 'emmet-expand-yas
+       ;; "epl" 'emmet-expand-line
        "rd" 'evilmr-replace-in-defun
        "rb" 'evilmr-replace-in-buffer
        "tt" 'evilmr-tag-selected-region ;; recommended
        "rt" 'evilmr-replace-in-tagged-region ;; recommended
-       "tua" 'artbollocks-mode
-       "cby" 'cb-switch-between-controller-and-view
-       "cbu" 'cb-get-url-from-controller
+       ;; "tua" 'artbollocks-mode
+       ;; "cby" 'cb-switch-between-controller-and-view
+       ;; "cbu" 'cb-get-url-from-controller
        "ht" 'etags-select-find-tag-at-point ; better than find-tag C-]
        "hp" 'etags-select-find-tag
        "mm" 'counsel-bookmark-goto
@@ -401,21 +401,21 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "ga" 'counsel-git-grep-by-author
        "gm" 'counsel-git-find-my-file
        "gs" 'counsel-git-show-commit
-       "rjs" 'run-js
-       "jsr" 'js-send-region
-       "rmz" 'run-mozilla
-       "rpy" 'run-python
-       "rlu" 'run-lua
-       "tci" 'toggle-company-ispell
+       ;; "rjs" 'run-js
+       ;; "jsr" 'js-send-region
+       ;; "rmz" 'run-mozilla
+       ;; "rpy" 'run-python
+       ;; "rlu" 'run-lua
+       ;; "tci" 'toggle-company-ispell
        "kb" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
        "it" 'issue-tracker-increment-issue-id-under-cursor
        "ls" 'highlight-symbol
        "lq" 'highlight-symbol-query-replace
        "ln" 'highlight-symbol-nav-mode ; use M-n/M-p to navigation between symbols
-       "bm" 'pomodoro-start ;; beat myself
+       ;; "bm" 'pomodoro-start ;; beat myself
        "ii" 'counsel-imenu-goto
-       "im" 'ido-imenu
-       "ij" 'rimenu-jump
+       ;; "im" 'ido-imenu
+       ;; "ij" 'rimenu-jump
        "." 'evil-ex
        ;; @see https://github.com/pidu/git-timemachine
        ;; p: previous; n: next; w:hash; W:complete hash; g:nth version; q:quit
@@ -425,15 +425,15 @@ If the character before and after CH is space or tab, CH is NOT slash"
        ;; toggle overview,  @see http://emacs.wordpress.com/2007/01/16/quick-and-dirty-code-folding/
        "ov" 'my-overview-of-current-buffer
        "or" 'open-readme-in-git-root-directory
-       "oo" 'compile
-       "c$" 'org-archive-subtree ; `C-c $'
+       ;; "oo" 'compile
+       ;; "c$" 'org-archive-subtree ; `C-c $'
        ;; org-do-demote/org-do-premote support selected region
-       "c<" 'org-do-promote ; `C-c C-<'
-       "c>" 'org-do-demote ; `C-c C->'
-       "cam" 'org-tags-view ; `C-c a m': search items in org-file-apps by tag
-       "cxi" 'org-clock-in ; `C-c C-x C-i'
-       "cxo" 'org-clock-out ; `C-c C-x C-o'
-       "cxr" 'org-clock-report ; `C-c C-x C-r'
+       ;; "c<" 'org-do-promote ; `C-c C-<'
+       ;; "c>" 'org-do-demote ; `C-c C->'
+       ;; "cam" 'org-tags-view ; `C-c a m': search items in org-file-apps by tag
+       ;; "cxi" 'org-clock-in ; `C-c C-x C-i'
+       ;; "cxo" 'org-clock-out ; `C-c C-x C-o'
+       ;; "cxr" 'org-clock-report ; `C-c C-x C-r'
        "qq" 'my-grep
        "xc" 'save-buffers-kill-terminal
        "rr" 'counsel-recentf-goto
@@ -443,8 +443,8 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "dfb" 'diff-region-compare-with-b
        "di" 'evilmi-delete-items
        "si" 'evilmi-select-items
-       "jb" 'js-beautify
-       "jp" 'js2-print-json-path
+       ;; "jb" 'js-beautify
+       ;; "jp" 'js2-print-json-path
        "sep" 'string-edit-at-point
        "sec" 'string-edit-conclude
        "sea" 'string-edit-abort
@@ -461,25 +461,25 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "UU" 'winner-redo
        "to" 'toggle-web-js-offset
        "sl" 'sort-lines
-       "ulr" 'uniquify-all-lines-region
-       "ulb" 'uniquify-all-lines-buffer
-       "lj" 'moz-load-js-file-and-send-it
+       ;; "ulr" 'uniquify-all-lines-region
+       ;; "ulb" 'uniquify-all-lines-buffer
+       ;; "lj" 'moz-load-js-file-and-send-it
        "lk" 'latest-kill-to-clipboard
-       "mr" 'moz-console-clear
-       "rnr" 'rinari-web-server-restart
-       "rnc" 'rinari-find-controller
-       "rnv" 'rinari-find-view
-       "rna" 'rinari-find-application
-       "rnk" 'rinari-rake
-       "rnm" 'rinari-find-model
-       "rnl" 'rinari-find-log
-       "rno" 'rinari-console
-       "rnt" 'rinari-find-test
+       ;; "mr" 'moz-console-clear
+       ;; "rnr" 'rinari-web-server-restart
+       ;; "rnc" 'rinari-find-controller
+       ;; "rnv" 'rinari-find-view
+       ;; "rna" 'rinari-find-application
+       ;; "rnk" 'rinari-rake
+       ;; "rnm" 'rinari-find-model
+       ;; "rnl" 'rinari-find-log
+       ;; "rno" 'rinari-console
+       ;; "rnt" 'rinari-find-test
        "ss" 'swiper-the-thing ; http://oremacs.com/2015/03/25/swiper-0.2.0/ for guide
-       "hst" 'hs-toggle-fold
-       "hsa" 'hs-toggle-fold-all
-       "hsh" 'hs-hide-block
-       "hss" 'hs-show-block
+       ;; "hst" 'hs-toggle-fold
+       ;; "hsa" 'hs-toggle-fold-all
+       ;; "hsh" 'hs-hide-block
+       ;; "hss" 'hs-show-block
        "hd" 'describe-function
        "hf" 'find-function
        "hk" 'describe-key
@@ -489,9 +489,9 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "fb" 'flyspell-buffer
        "fe" 'flyspell-goto-next-error
        "fa" 'flyspell-auto-correct-word
-       "pe" 'flymake-goto-prev-error
-       "ne" 'flymake-goto-next-error
-       "fw" 'ispell-word
+       ;; "pe" 'flymake-goto-prev-error
+       ;; "ne" 'flymake-goto-next-error
+       ;; "fw" 'ispell-word
        "bc" '(lambda () (interactive) (wxhelp-browse-class-or-api (thing-at-point 'symbol)))
        "ma" 'mc/mark-all-like-this-in-defun
        "mw" 'mc/mark-all-words-like-this-in-defun
@@ -500,13 +500,13 @@ If the character before and after CH is space or tab, CH is NOT slash"
        ;; recommended in html
        "md" 'mc/mark-all-like-this-dwim
        "me" 'mc/edit-lines
-       "oag" 'org-agenda
+       ;; "oag" 'org-agenda
        "otl" 'org-toggle-link-display
-       "om" 'toggle-org-or-message-mode
+       ;; "om" 'toggle-org-or-message-mode
        "ut" 'undo-tree-visualize
        "ar" 'align-regexp
-       "wrn" 'httpd-restart-now
-       "wrd" 'httpd-restart-at-default-directory
+       ;; "wrn" 'httpd-restart-now
+       ;; "wrd" 'httpd-restart-at-default-directory
        "bk" 'buf-move-up
        "bj" 'buf-move-down
        "bh" 'buf-move-left
@@ -518,124 +518,126 @@ If the character before and after CH is space or tab, CH is NOT slash"
        "3" 'select-window-3
        "4" 'select-window-4
        "5" 'select-window-5
-       "6" 'select-window-6
-       "7" 'select-window-7
-       "8" 'select-window-8
-       "9" 'select-window-9
+       ;; "6" 'select-window-6
+       ;; "7" 'select-window-7
+       ;; "8" 'select-window-8
+       ;; "9" 'select-window-9
        "xm" 'smex
        "xx" 'er/expand-region
-       "xf" 'ido-find-file
-       "xb" 'ido-switch-buffer
+       ;; "xf" 'ido-find-file
+       ;; "xb" 'ido-switch-buffer
        "xh" 'mark-whole-buffer
-       "xk" 'ido-kill-buffer
+       ;; "xk" 'ido-kill-buffer
        "xs" 'save-buffer
        "xz" 'suspend-frame
        "vm" 'vc-rename-file-and-buffer
-       "vc" 'vc-copy-file-and-rename-buffer
-       "xvv" 'vc-next-action
+       ;; "vc" 'vc-copy-file-and-rename-buffer
+       ;; "xvv" 'vc-next-action
        "va" 'git-add-current-file
        "xvp" 'git-push-remote-origin
        "xvu" 'git-add-option-update
-       "xvg" 'vc-annotate
-       "vs" 'git-gutter:stage-hunk
-       "vr" 'git-gutter:revert-hunk
-       "vl" 'vc-print-log
-       "vv" 'git-messenger:popup-message
-       "v=" 'git-gutter:popup-hunk
-       "hh" 'cliphist-paste-item
-       "yu" 'cliphist-select-item
-       "nn" 'my-goto-next-hunk
-       "pp" 'my-goto-previous-hunk
+       ;; "xvg" 'vc-annotate
+       ;; "vs" 'git-gutter:stage-hunk
+       ;; "vr" 'git-gutter:revert-hunk
+       ;; "vl" 'vc-print-log
+       ;; "vv" 'git-messenger:popup-message
+       ;; "v=" 'git-gutter:popup-hunk
+       ;; "hh" 'cliphist-paste-item
+       ;; "yu" 'cliphist-select-item
+       ;; "nn" 'my-goto-next-hunk
+       ;; "pp" 'my-goto-previous-hunk
        "ww" 'narrow-or-widen-dwim
        "xnw" 'widen
        "xnd" 'narrow-to-defun
        "xnr" 'narrow-to-region
-       "ycr" 'my-yas-reload-all
+       ;; "ycr" 'my-yas-reload-all
        "wf" 'popup-which-function)
 ;; }}
 
 ;; {{ Use `SPC` as leader key
 ;; all keywords arguments are still supported
 (nvmap :prefix "SPC"
-       "ss" 'wg-create-workgroup ; save windows layout
-       "ll" 'my-wg-switch-workgroup ; load windows layout
-       "kk" 'scroll-other-window
-       "jj" 'scroll-other-window-up
+       ;; "ss" 'wg-create-workgroup ; save windows layout
+       ;; "ll" 'my-wg-switch-workgroup ; load windows layout
+       ;; "kk" 'scroll-other-window
+       ;; "jj" 'scroll-other-window-up
        "yy" 'hydra-launcher/body
        "gs" 'git-gutter:set-start-revision
        "gh" 'git-gutter-reset-to-head-parent
        "gr" 'git-gutter-reset-to-default
-       "ud" 'my-gud-gdb
-       "uk" 'gud-kill-yes
-       "ur" 'gud-remove
-       "ub" 'gud-break
-       "uu" 'gud-run
-       "up" 'gud-print
-       "ue" 'gud-cls
-       "un" 'gud-next
-       "us" 'gud-step
-       "ui" 'gud-stepi
-       "uc" 'gud-cont
-       "uf" 'gud-finish)
+       ;; "ud" 'my-gud-gdb
+       ;; "uk" 'gud-kill-yes
+       ;; "ur" 'gud-remove
+       ;; "ub" 'gud-break
+       ;; "uu" 'gud-run
+       ;; "up" 'gud-print
+       ;; "ue" 'gud-cls
+       ;; "un" 'gud-next
+       ;; "us" 'gud-step
+       ;; "ui" 'gud-stepi
+       ;; "uc" 'gud-cont
+       ;; "uf" 'gud-finish
+       )
 
-;; per-major-mode leader setup
-(general-define-key :states '(normal motion insert emacs)
-                    :keymaps 'js2-mode-map
-                    :prefix "SPC"
-                    :non-normal-prefix "M-SPC"
-                    "de" 'js2-display-error-list
-                    "nn" 'js2-next-error
-                    "te" 'js2-mode-toggle-element
-                    "tf" 'js2-mode-toggle-hide-functions
-                    "jeo" 'js2r-expand-object
-                    "jco" 'js2r-contract-object
-                    "jeu" 'js2r-expand-function
-                    "jcu" 'js2r-contract-function
-                    "jea" 'js2r-expand-array
-                    "jca" 'js2r-contract-array
-                    "jwi" 'js2r-wrap-buffer-in-iife
-                    "jig" 'js2r-inject-global-in-iife
-                    "jev" 'js2r-extract-var
-                    "jiv" 'js2r-inline-var
-                    "jrv" 'js2r-rename-var
-                    "jvt" 'js2r-var-to-this
-                    "jag" 'js2r-add-to-globals-annotation
-                    "jsv" 'js2r-split-var-declaration
-                    "jss" 'js2r-split-string
-                    "jef" 'js2r-extract-function
-                    "jem" 'js2r-extract-method
-                    "jip" 'js2r-introduce-parameter
-                    "jlp" 'js2r-localize-parameter
-                    "jtf" 'js2r-toggle-function-expression-and-declaration
-                    "jao" 'js2r-arguments-to-object
-                    "juw" 'js2r-unwrap
-                    "jwl" 'js2r-wrap-in-for-loop
-                    "j3i" 'js2r-ternary-to-if
-                    "jlt" 'js2r-log-this
-                    "jsl" 'js2r-forward-slurp
-                    "jba" 'js2r-forward-barf
-                    "jk" 'js2r-kill)
-;; }}
+;; ;; per-major-mode leader setup
+;; (general-define-key :states '(normal motion insert emacs)
+;;                     :keymaps 'js2-mode-map
+;;                     :prefix "SPC"
+;;                     :non-normal-prefix "M-SPC"
+;;                     "de" 'js2-display-error-list
+;;                     "nn" 'js2-next-error
+;;                     "te" 'js2-mode-toggle-element
+;;                     "tf" 'js2-mode-toggle-hide-functions
+;;                     "jeo" 'js2r-expand-object
+;;                     "jco" 'js2r-contract-object
+;;                     "jeu" 'js2r-expand-function
+;;                     "jcu" 'js2r-contract-function
+;;                     "jea" 'js2r-expand-array
+;;                     "jca" 'js2r-contract-array
+;;                     "jwi" 'js2r-wrap-buffer-in-iife
+;;                     "jig" 'js2r-inject-global-in-iife
+;;                     "jev" 'js2r-extract-var
+;;                     "jiv" 'js2r-inline-var
+;;                     "jrv" 'js2r-rename-var
+;;                     "jvt" 'js2r-var-to-this
+;;                     "jag" 'js2r-add-to-globals-annotation
+;;                     "jsv" 'js2r-split-var-declaration
+;;                     "jss" 'js2r-split-string
+;;                     "jef" 'js2r-extract-function
+;;                     "jem" 'js2r-extract-method
+;;                     "jip" 'js2r-introduce-parameter
+;;                     "jlp" 'js2r-localize-parameter
+;;                     "jtf" 'js2r-toggle-function-expression-and-declaration
+;;                     "jao" 'js2r-arguments-to-object
+;;                     "juw" 'js2r-unwrap
+;;                     "jwl" 'js2r-wrap-in-for-loop
+;;                     "j3i" 'js2r-ternary-to-if
+;;                     "jlt" 'js2r-log-this
+;;                     "jsl" 'js2r-forward-slurp
+;;                     "jba" 'js2r-forward-barf
+;;                     "jk" 'js2r-kill)
+;; ;; }}
 
 ;; {{ Use `;` as leader key, for searching something
 (nvmap :prefix ";"
        ";" 'avy-goto-subword-1
-       "db" 'sdcv-search-pointer ; in buffer
-       "dt" 'sdcv-search-input+ ;; in tip
-       "dd" 'my-lookup-dict-org
-       "dw" 'define-word
-       "dp" 'define-word-at-point
-       "mm" 'lookup-doc-in-man
-       "gg" 'w3m-google-search
-       "gf" 'w3m-google-by-filetype
-       "gd" 'w3m-search-financial-dictionary
-       "gj" 'w3m-search-js-api-mdn
-       "ga" 'w3m-java-search
-       "gh" 'w3mext-hacker-search ; code search in all engines with firefox
-       "gq" 'w3m-stackoverflow-search
-       "mm" 'mpc-which-song
-       "mn" 'mpc-next-prev-song
-       "mp" '(lambda () (interactive) (mpc-next-prev-song t)))
+       ;; "db" 'sdcv-search-pointer ; in buffer
+       ;; "dt" 'sdcv-search-input+ ;; in tip
+       ;; "dd" 'my-lookup-dict-org
+       ;; "dw" 'define-word
+       ;; "dp" 'define-word-at-point
+       ;; "mm" 'lookup-doc-in-man
+       ;; "gg" 'w3m-google-search
+       ;; "gf" 'w3m-google-by-filetype
+       ;; "gd" 'w3m-search-financial-dictionary
+       ;; "gj" 'w3m-search-js-api-mdn
+       ;; "ga" 'w3m-java-search
+       ;; "gh" 'w3mext-hacker-search ; code search in all engines with firefox
+       ;; "gq" 'w3m-stackoverflow-search
+       ;; "mm" 'mpc-which-song
+       ;; "mn" 'mpc-next-prev-song
+       ;; "mp" '(lambda () (interactive) (mpc-next-prev-song t))
+       )
 ;; }}
 
 ;; change mode-line color by evil state

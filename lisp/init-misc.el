@@ -23,22 +23,22 @@
 (global-set-key (kbd "C-x C-o") 'ffap)
 
 ;; salesforce
-(autoload 'apex-mode "apex-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.cls\\'" . apex-mode))
-(add-to-list 'auto-mode-alist '("\\.trigger\\'" . apex-mode))
+;; (autoload 'apex-mode "apex-mode" nil t)
+;; (add-to-list 'auto-mode-alist '("\\.cls\\'" . apex-mode))
+;; (add-to-list 'auto-mode-alist '("\\.trigger\\'" . apex-mode))
 ;; java
-(add-to-list 'auto-mode-alist '("\\.aj\\'" . java-mode))
+;; (add-to-list 'auto-mode-alist '("\\.aj\\'" . java-mode))
 ;; makefile
 (add-to-list 'auto-mode-alist '("\\.ninja$" . makefile-gmake-mode))
 
 ;; {{ support MY packages which are not included in melpa
-(autoload 'wxhelp-browse-class-or-api "wxwidgets-help" "" t)
-(autoload 'issue-tracker-increment-issue-id-under-cursor "issue-tracker" "" t)
-(autoload 'issue-tracker-insert-issue-list "issue-tracker" "" t)
-(autoload 'elpamr-create-mirror-for-installed "elpa-mirror" "" t)
-(autoload 'org2nikola-export-subtree "org2nikola" "" t)
-(autoload 'org2nikola-rerender-published-posts "org2nikola" "" t)
-(setq org2nikola-use-verbose-metadata t) ; for nikola 7.7+
+;; (autoload 'wxhelp-browse-class-or-api "wxwidgets-help" "" t)
+;; (autoload 'issue-tracker-increment-issue-id-under-cursor "issue-tracker" "" t)
+;; (autoload 'issue-tracker-insert-issue-list "issue-tracker" "" t)
+;; (autoload 'elpamr-create-mirror-for-installed "elpa-mirror" "" t)
+;; (autoload 'org2nikola-export-subtree "org2nikola" "" t)
+;; (autoload 'org2nikola-rerender-published-posts "org2nikola" "" t)
+;; (setq org2nikola-use-verbose-metadata t) ; for nikola 7.7+
 ;; }}
 
 (define-key global-map (kbd "RET") 'newline-and-indent)
@@ -102,34 +102,34 @@
   "--exclude-dir=.git --exclude-dir=.bzr --exclude-dir=.svn"
   "Extra grep options passed to `my-grep'")
 
-(defun my-grep ()
-  "Grep file at project root directory or current directory"
-  (interactive)
-  (let ((keyword (if (region-active-p)
-                     (buffer-substring-no-properties (region-beginning) (region-end))
-                   (read-string "Enter grep pattern: ")))
-        cmd collection val 1st root)
+;; (defun my-grep ()
+;;   "Grep file at project root directory or current directory"
+;;   (interactive)
+;;   (let ((keyword (if (region-active-p)
+;;                      (buffer-substring-no-properties (region-beginning) (region-end))
+;;                    (read-string "Enter grep pattern: ")))
+;;         cmd collection val 1st root)
 
-    (let ((default-directory (setq root (or (and (fboundp 'ffip-get-project-root-directory)
-                                                 (ffip-get-project-root-directory))
-                                            default-directory))))
-      (setq cmd (format "%s -rsn %s \"%s\" *"
-                        grep-program my-grep-extra-opts keyword))
-      (when (and (setq collection (split-string
-                                   (shell-command-to-string cmd)
-                                   "\n"
-                                   t))
-                 (setq val (ivy-read (format "matching \"%s\" at %s:" keyword root) collection))))
-      (setq lst (split-string val ":"))
-      (find-file (car lst))
-      (goto-char (point-min))
-      (forward-line (1- (string-to-number (cadr lst)))))))
+;;     (let ((default-directory (setq root (or (and (fboundp 'ffip-get-project-root-directory)
+;;                                                  (ffip-get-project-root-directory))
+;;                                             default-directory))))
+;;       (setq cmd (format "%s -rsn %s \"%s\" *"
+;;                         grep-program my-grep-extra-opts keyword))
+;;       (when (and (setq collection (split-string
+;;                                    (shell-command-to-string cmd)
+;;                                    "\n"
+;;                                    t))
+;;                  (setq val (ivy-read (format "matching \"%s\" at %s:" keyword root) collection))))
+;;       (setq lst (split-string val ":"))
+;;       (find-file (car lst))
+;;       (goto-char (point-min))
+;;       (forward-line (1- (string-to-number (cadr lst)))))))
 ;; }}
 
-;; {{ groovy-mode
- (add-to-list 'auto-mode-alist '("\\.groovy\\'" . groovy-mode))
- (add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
-;; }}
+;; ;; {{ groovy-mode
+;;  (add-to-list 'auto-mode-alist '("\\.groovy\\'" . groovy-mode))
+;;  (add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
+;; ;; }}
 
 ;; {{ https://github.com/browse-kill-ring/browse-kill-ring
 (require 'browse-kill-ring)
@@ -145,40 +145,40 @@
 ;; g => update/refresh
 ;; }}
 
-;; {{ gradle
-(defun my-run-gradle-in-shell (cmd)
-  (interactive "sEnter a string:")
-  (let ((root-dir (locate-dominating-file default-directory
-                                          "build.gradle")))
-    (if root-dir
-      (let ((default-directory root-dir))
-        (shell-command (concat "gradle " cmd "&"))))
-    ))
-;; }}
+;; ;; {{ gradle
+;; (defun my-run-gradle-in-shell (cmd)
+;;   (interactive "sEnter a string:")
+;;   (let ((root-dir (locate-dominating-file default-directory
+;;                                           "build.gradle")))
+;;     (if root-dir
+;;       (let ((default-directory root-dir))
+;;         (shell-command (concat "gradle " cmd "&"))))
+;;     ))
+;; ;; }}
 
 ;; {{ crontab
 ;; in shell "EDITOR='emacs -nw' crontab -e" to edit cron job
 (add-to-list 'auto-mode-alist '("crontab.*\\'" . crontab-mode))
 ;; }}
 
-;; cmake
-(setq auto-mode-alist (append '(("CMakeLists\\.txt\\'" . cmake-mode))
-                              '(("\\.cmake\\'" . cmake-mode))
-                              auto-mode-alist))
+;; ;; cmake
+;; (setq auto-mode-alist (append '(("CMakeLists\\.txt\\'" . cmake-mode))
+;;                               '(("\\.cmake\\'" . cmake-mode))
+;;                               auto-mode-alist))
 
 (defun back-to-previous-buffer ()
   (interactive)
   (switch-to-buffer nil))
 
-;; {{ dictionary setup
-(autoload 'dictionary-new-search "dictionary" "" t nil)
-(defun my-lookup-dict-org ()
-  (interactive)
-  (dictionary-new-search (cons (if (region-active-p)
-                                   (buffer-substring-no-properties (region-beginning) (region-end))
-                                 (thing-at-point 'symbol)) dictionary-default-dictionary)))
+;; ;; {{ dictionary setup
+;; (autoload 'dictionary-new-search "dictionary" "" t nil)
+;; (defun my-lookup-dict-org ()
+;;   (interactive)
+;;   (dictionary-new-search (cons (if (region-active-p)
+;;                                    (buffer-substring-no-properties (region-beginning) (region-end))
+;;                                  (thing-at-point 'symbol)) dictionary-default-dictionary)))
 
-;; }}
+;; ;; }}
 
 ;; {{ bookmark
 ;; use my own bmk if it exists
@@ -190,9 +190,9 @@
   (interactive)
   (insert "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sem mauris, aliquam vel interdum in, faucibus non libero. Asunt in anim uis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in anim id est laborum. Allamco laboris nisi ut aliquip ex ea commodo consequat."))
 
-(defun my-gud-gdb ()
-  (interactive)
-  (gud-gdb (concat "gdb --fullname \"" (cppcm-get-exe-path-current-buffer) "\"")))
+;; (defun my-gud-gdb ()
+;;   (interactive)
+;;   (gud-gdb (concat "gdb --fullname \"" (cppcm-get-exe-path-current-buffer) "\"")))
 
 (defun my-overview-of-current-buffer ()
   (interactive)
@@ -226,7 +226,7 @@
     (setq flyspell-check-doublon nil)
     ;; enable for all programming modes
     ;; http://emacsredux.com/blog/2013/04/21/camelcase-aware-editing/
-    (subword-mode)
+    ;;(subword-mode)
     (setq-default electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
     (electric-pair-mode 1)
 

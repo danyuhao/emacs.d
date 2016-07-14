@@ -11,16 +11,17 @@
 
 (eval-after-load 'company
   '(progn
-     ;; @see https://github.com/company-mode/company-mode/issues/348
-     (unless (featurep 'company-statistics)
-       (require 'company-statistics))
-     (company-statistics-mode)
+     ;; ;; @see https://github.com/company-mode/company-mode/issues/348
+     ;; (unless (featurep 'company-statistics)
+     ;;   (require 'company-statistics))
+     ;; (company-statistics-mode)
 
-     (add-to-list 'company-backends 'company-cmake)
+     ;; (add-to-list 'company-backends 'company-cmake)
      (add-to-list 'company-backends 'company-c-headers)
      ;; can't work with TRAMP
      (setq company-backends (delete 'company-ropemacs company-backends))
      ;; (setq company-backends (delete 'company-capf company-backends))
+     (setq company-backends (delete 'company-semantic company-backends))
 
      ;; I don't like the downcase word in company-dabbrev
      ;; for languages use camel case naming convention
